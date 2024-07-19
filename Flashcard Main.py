@@ -6,7 +6,10 @@
 import json
 import random
 import color
+import os
 
+directory = os.path.dirname(os.path.abspath(__file__))
+library_path = os.path.join(directory, 'library.json')
 
 def library_empty(x):
     try:
@@ -49,22 +52,22 @@ def add():
                 print(color.purple + key + " | " + value)
             new_set = {title: vocab_list.copy()}
 
-            if not library_empty("library.json"):
-                with open("library.json", "r") as file:
+            if not library_empty(library_path):
+                with open(library_path, "r") as file:
                     extract = json.load(file)
                 extract.update(new_set)
 
-                with open("library.json", "w") as file:
+                with open(library_path, "w") as file:
                     json.dump(extract, file)
             else:
-                with open("library.json", "w") as file:
+                with open(library_path, "w") as file:
                     json.dump(new_set, file)
             break
 
 
 def view():
-    if not library_empty("library.json"):
-        with open("library.json", "r") as file:
+    if not library_empty(library_path):
+        with open(library_path, "r") as file:
             l_view = json.load(file)
             for title, hash_v in l_view.items():
                 print(color.blue + title)
@@ -76,22 +79,22 @@ def view():
 
 
 def study():
-    if library_empty("library.json"):
+    if library_empty(library_path):
         print("error: library is empty")
         return
 
-    with open("library.json", "r") as file:
+    with open(library_path, "r") as file:
         entire = json.load(file)
         titles = list(entire.keys())
         titles = "(" + " | ".join(titles) + ")"
     vocab_choice = input("which vocabulary set would you like to study " + color.blue +
                          titles + color.default + ": ").lower()
 
-    if library_empty("library.json"):
+    if library_empty(library_path):
         print("error: library is empty. add a new study set")
         return
 
-    with open("library.json", "r") as file:
+    with open(library_path, "r") as file:
         entire = json.load(file)
 
     if vocab_choice in entire:
@@ -134,11 +137,11 @@ def study():
 
 
 def edit():
-    if library_empty("library.json"):
+    if library_empty(library_path):
         print("error: library is empty")
         return
 
-    with open("library.json", "r") as file:
+    with open(library_path, "r") as file:
         entire = json.load(file)
         titles = list(entire.keys())
         titles = "(" + " | ".join(titles) + ")"
@@ -173,7 +176,7 @@ def edit():
                 else:
                     break
 
-            with open("library.json", "w") as file:
+            with open(library_path, "w") as file:
                 json.dump(entire, file)
 
         elif remove_or_add == 'add':
@@ -196,7 +199,7 @@ def edit():
                     continue
                 else:
                     entire[edit_choice] = edit_set
-                    with open("library.json", "w") as editFile:
+                    with open(library_path, "w") as editFile:
                         json.dump(entire, editFile)
                     print("this is your new set\n" + edit_choice + "\n" + str(edit_set))
                     return
