@@ -76,6 +76,10 @@ def view():
 
 
 def study():
+    if library_empty("library.json"):
+        print("error: library is empty")
+        return
+
     with open("library.json", "r") as file:
         entire = json.load(file)
         titles = list(entire.keys())
@@ -163,7 +167,7 @@ def edit():
                     print("error: your entry is not within the study set")
                     continue
 
-                deletion = input("do you want to delete any more words? ").lower()
+                deletion = input("do you want to delete any more terms? ").lower()
                 if deletion == 'yes':
                     continue
                 else:
@@ -186,7 +190,7 @@ def edit():
                     print(color.red + "error: try again")
                     continue
 
-                leave = input(color.blue + 'do you still want to add words? ').lower()
+                leave = input(color.blue + 'do you still want to add words: ').lower()
 
                 if leave == 'yes':
                     continue
